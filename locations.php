@@ -6,8 +6,8 @@
 	// get event info
 	$event_id = $_GET['id'];
 	$query= "select * from event where id = $event_id;";
-	$result=mysql_query($query);
-	$row = mysql_fetch_array($result);
+	$result=mysqli_query($query);
+	$row = mysqli_fetch_array($result);
 	$event_status = $row['status'];	// status of event
 	$event_name = $row['name'];	// event name
 	$event_phone = $row['phone_number'];	// event phone number
@@ -19,8 +19,8 @@
 
 	// get number of checked in ppl
 	$query="select * from locations where event_id = $event_id order by number asc limit $num_locs;";
-	$result=mysql_query($query);
-	$num_locs = (mysql_num_rows($result)) ? mysql_num_rows($result): 0;
+	$result=mysqli_query($query);
+	$num_locs = (mysqli_num_rows($result)) ? mysqli_num_rows($result): 0;
 
 ?>
 <html>
@@ -67,8 +67,8 @@
 								<div data-role="fieldcontain">
 							<?php
 								//$query="select * from locations where event_id = $event_id order by number asc limit $num_locs;";
-								//$result=mysql_query($query);
-								while($row = mysql_fetch_array($result)) {
+								//$result=mysqli_query($query);
+								while($row = mysqli_fetch_array($result)) {
 									$name = $row["name"];
 									$i = $row["number"];
 							?>

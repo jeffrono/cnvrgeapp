@@ -15,7 +15,7 @@ elseif($_POST['deactivate']) {
 	$query = "update user set status=4 where id = $user_id;";
 }
 
-mysql_query($query);
+mysqli_query($query);
 
 $host  = $_SERVER['HTTP_HOST'];
 $uri   = rtrim(dirname($_SERVER['PHP_SELF']), '/\\');

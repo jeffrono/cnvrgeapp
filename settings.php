@@ -7,8 +7,8 @@
 	// get event info
 	$event_id = $_GET['id'];
 	$query= "select * from event where id = $event_id;";
-	$result=mysql_query($query);
-	$row = mysql_fetch_array($result);
+	$result=mysqli_query($query);
+	$row = mysqli_fetch_array($result);
 	$event_status = $row['status'];	// status of event
 	$event_name = $row['name'];	// event name
 	$event_phone = $row['phone_number'];	// event phone number

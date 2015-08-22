@@ -6,8 +6,8 @@
 	// get event info
 	$event_id = $_GET['id'];
 	$query= "select * from event where id = $event_id;";
-	$result=mysql_query($query);
-	$row = mysql_fetch_array($result);
+	$result=mysqli_query($query);
+	$row = mysqli_fetch_array($result);
 	$event_status = $row['status'];	// status of event
 	$event_name = $row['name'];	// event name
 	$event_phone = $row['phone_number'];	// event phone number
@@ -19,8 +19,8 @@
 
 	// get number of checked in ppl
 	$query= "select * from user where event_id = $event_id order by fname asc;";
-	$result=mysql_query($query);
-	$total_checkin = (mysql_num_rows($result)) ? mysql_num_rows($result): 0;
+	$result=mysqli_query($query);
+	$total_checkin = (mysqli_num_rows($result)) ? mysqli_num_rows($result): 0;
 
 ?>
 <html>
@@ -56,14 +56,14 @@
 								<?php
 									// show "partially checked in" if relevant
 									$query= "select * from user where event_id = $event_id and status < 3 order by fname asc;";
-									$result=mysql_query($query);
-									if( mysql_num_rows($result) > 0) {
+									$result=mysqli_query($query);
+									if( mysqli_num_rows($result) > 0) {
 									?>
 										<div data-role="collapsible" data-collapsed="false">
-											<h3><?php echo mysql_num_rows($result); ?> Partial Check-Ins</h3>
+											<h3><?php echo mysqli_num_rows($result); ?> Partial Check-Ins</h3>
 											<ol>
 											<?php
-												while( $row = mysql_fetch_array($result) ) {
+												while( $row = mysqli_fetch_array($result) ) {
 											?>
 												<li>
 													<?php
@@ -88,14 +88,14 @@
 									<?php
 									// show "fully checked in" if relevant
 									$query= "select * from user where event_id = $event_id and status = 3 order by fname asc;";
-									$result=mysql_query($query);
-									if( mysql_num_rows($result) > 0) {
+									$result=mysqli_query($query);
+									if( mysqli_num_rows($result) > 0) {
 									?>
 										<div data-role="collapsible" data-collapsed="false">
-											<h3><?php echo mysql_num_rows($result); ?> Complete Check-Ins</h3>
+											<h3><?php echo mysqli_num_rows($result); ?> Complete Check-Ins</h3>
 											<ol>
 											<?php
-												while( $row = mysql_fetch_array($result) ) {
+												while( $row = mysqli_fetch_array($result) ) {
 											?>
 												<li>
 													<?php
@@ -122,14 +122,14 @@
 									<?php
 									// show "checked out" if relevant
 									$query= "select * from user where event_id = $event_id and status = 4 order by fname asc;";
-									$result=mysql_query($query);
-									if( mysql_num_rows($result) > 0) {
+									$result=mysqli_query($query);
+									if( mysqli_num_rows($result) > 0) {
 									?>
 										<div data-role="collapsible" data-collapsed="false">
-											<h3><?php echo mysql_num_rows($result); ?> Check-Outs</h3>
+											<h3><?php echo mysqli_num_rows($result); ?> Check-Outs</h3>
 											<ol>
 											<?php
-												while( $row = mysql_fetch_array($result) ) {
+												while( $row = mysqli_fetch_array($result) ) {
 											?>
 												<li>
 													<?php

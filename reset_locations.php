@@ -7,11 +7,11 @@ $event_id = $_POST['event_id'];
 
 // reset location info
 $query="delete from locations where event_id = $event_id;";
-$result=mysql_query($query);
+$result=mysqli_query($query);
 
 for ($i = 1; $i <= 100; $i++) {
 	$query="insert into locations (number, name, event_id) value ($i, 'Location $i', $event_id);";
-	$result=mysql_query($query);
+	$result=mysqli_query($query);
 }
 
 $host  = $_SERVER['HTTP_HOST'];

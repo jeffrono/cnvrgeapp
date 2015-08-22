@@ -13,8 +13,8 @@ $message = stripslashes($_POST['message']); // strip slash because otherwise twi
 
 // get event info
 $query="select * from event where id = $event_id;";
-$result=mysql_query($query);
-$row = mysql_fetch_array($result);
+$result=mysqli_query($query);
+$row = mysqli_fetch_array($result);
 $outgoing_twilio = $row['phone_number'];
 $event_name = $row['name'];
 $event_email = $row['event_email'];
@@ -31,8 +31,8 @@ $message = substr($message, 0 , 158);
 // notify all active users
 // also email digest of all meetings
 $query="select * from user where event_id = $event_id;";
-$result=mysql_query($query);
-while($row = mysql_fetch_array($result)) {
+$result=mysqli_query($query);
+while($row = mysqli_fetch_array($result)) {
 	$user_twilio = $row["twilio"];
 	$user_name = $row["fname"];
 	$user_email = $row["email"];
@@ -65,8 +65,8 @@ while($row = mysql_fetch_array($result)) {
 
 if($event_email) {
 	$query="select * from user where event_id = $event_id;";
-	$result=mysql_query($query);
-	while($row = mysql_fetch_array($result)) {
+	$result=mysqli_query($query);
+	while($row = mysqli_fetch_array($result)) {
 		$email_text .= $row['fname']. "\t" . $row['bio']. "\t" . $row['email']. "\n";
 		
 		$query = "select user_met.meeting_order, user.fname, user.bio, locations.name
@@ -74,10 +74,10 @@ if($event_email) {
 						join locations on user_met.location_id = locations.id
 						join user on user_met.met_user_id = user.id
 						where user_id = ". $row['id'];
-		$resulta =mysql_query($query);
-		$count = mysql_num_rows($resulta);
+		$resulta =mysqli_query($query);
+		$count = mysqli_num_rows($resulta);
 		$email_text .= "\tMet the following $count people:\n";
-		while($rowa = mysql_fetch_array($resulta)) {
+		while($rowa = mysqli_fetch_array($resulta)) {
 			$email_text .= "\tRound # " . $rowa['meeting_order'] . ": " .  $rowa['fname'] . " (at " . $rowa['name'] . ")\n";
 		}	
 	} //while
@@ -90,7 +90,7 @@ if($event_email) {
 
 // update status to END (4)
 $query="update event set status = 4 where id = $event_id;";
-$result=mysql_query($query);
+$result=mysqli_query($query);
 
 $host  = $_SERVER['HTTP_HOST'];
 $uri   = rtrim(dirname($_SERVER['PHP_SELF']), '/\\');

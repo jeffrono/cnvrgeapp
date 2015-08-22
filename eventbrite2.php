@@ -9,8 +9,8 @@ $event_id = $_GET['id'];
 $event_id = 3609;
 
 $query= "select * from event where id = $event_id;";
-$result=mysql_query($query);
-$row = mysql_fetch_array($result);
+$result=mysqli_query($query);
+$row = mysqli_fetch_array($result);
 $eventbrite_token = $row['eventbrite_token'];	// eventbrite token
 $eventbrite_id = $row['eventbrite_id'];	// eventbrite id
 $eventbrite_key = $row['eventbrite_key'];	// eventbrite id

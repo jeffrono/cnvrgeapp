@@ -17,10 +17,10 @@ function db_connect() {
 	
 	$link= new mysqli($server, $username, $password, $db);
 	if (!$link) {
-		die('Could not connect: ' . mysql_error());
+		die('Could not connect: ' . mysqli_error());
 	}
 	else {
-		mysql_select_db($database, $link);
+		//mysqli_select_db($database, $link);
 		return $link;
 	}
 }

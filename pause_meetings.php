@@ -13,13 +13,13 @@ $message = stripslashes($_POST['message']); // strip slash because otherwise twi
 
 // get event info
 $query="select * from event where id = $event_id;";
-$result=mysql_query($query);
-$row = mysql_fetch_array($result);
+$result=mysqli_query($query);
+$row = mysqli_fetch_array($result);
 $outgoing_twilio = $row['phone_number'];
 
 // update status to PAUSE (3)
 $query="update event set status = 3 where id = $event_id;";
-$result=mysql_query($query);
+$result=mysqli_query($query);
 
 // get correct message to send
 	if(strlen($message) < 5 or strlen($message) > 80) {
@@ -36,8 +36,8 @@ $result=mysql_query($query);
 
 // get active users
 $query="select * from user where event_id = $event_id;";
-$result=mysql_query($query);
-while($row = mysql_fetch_array($result)) {
+$result=mysqli_query($query);
+while($row = mysqli_fetch_array($result)) {
 	$user_twilio = $row["twilio"];
 
 	// text the user

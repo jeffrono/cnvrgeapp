@@ -5,8 +5,8 @@
 	// get event info
 	$event_id = $_GET['id'];
 	$query= "select * from event where id = $event_id;";
-	$result=mysql_query($query);
-	$row = mysql_fetch_array($result);
+	$result=mysqli_query($query);
+	$row = mysqli_fetch_array($result);
 	$event_status = $row['status'];	// status of event
 	$event_name = $row['name'];	// event name
 	$event_phone = $row['phone_number'];	// event phone number
@@ -18,8 +18,8 @@
 	
 	// get # of participants checked in
 	$query= "select * from user where event_id = $event_id order by fname asc;";
-	$result=mysql_query($query);
-	$total_checkin = (mysql_num_rows($result)) ? mysql_num_rows($result): 0;
+	$result=mysqli_query($query);
+	$total_checkin = (mysqli_num_rows($result)) ? mysqli_num_rows($result): 0;
 ?>
 <html>
     <head>
@@ -70,14 +70,14 @@
 							case 2: // event has begun, show timer
 								// get meeting length
 								$query="select meet_duration from event where id = $event_id;";
-								$result=mysql_query($query);
-								$row = mysql_fetch_array($result);
+								$result=mysqli_query($query);
+								$row = mysqli_fetch_array($result);
 								$meet_duration = $row["meet_duration"];
 								
 								$query="select order_num, TIME_TO_SEC(TIMEDIFF((DATE_ADD(meeting_status.meeting_time, INTERVAL $meet_duration MINUTE)), now())) as time_remaining from meeting_status where event_id = $event_id;";
 
-								$result=mysql_query($query);
-								$row = mysql_fetch_array($result);
+								$result=mysqli_query($query);
+								$row = mysqli_fetch_array($result);
 								$this_round = $row["order_num"];
 								$time_remaining = $row["time_remaining"];
 						?>
@@ -110,8 +110,8 @@
 										) tb1
 										join locations l on l.id = tb1.location_id
 										order by tb1.Afname asc;";
-										$result=mysql_query($query);
-										while($row = mysql_fetch_array($result)) {
+										$result=mysqli_query($query);
+										while($row = mysqli_fetch_array($result)) {
 									?>
 										<li><b><?php echo $row["Afname"]; ?></b> -> <?php echo $row["Bfname"] . " @ " . $row["name"]; ?><?php if($row["no_show"]) { echo " <b>NO SHOW</b>"; } ?></li>
 									<?php
@@ -136,8 +136,8 @@
 											( select A_user_id from meeting where meeting_order = $this_round and event_id = $event_id)
 										and user.id not in
 											( select B_user_id from meeting where meeting_order = $this_round and event_id = $event_id);";
-										$result=mysql_query($query);
-										while($row = mysql_fetch_array($result)) {
+										$result=mysqli_query($query);
+										while($row = mysqli_fetch_array($result)) {
 									?>
 										<li><b><?php echo $row["fname"]; ?></b></li>
 									<?php
@@ -158,8 +158,8 @@
 										from user
 										where status = 4
 										and event_id = $event_id;";
-										$result=mysql_query($query);
-										while($row = mysql_fetch_array($result)) {
+										$result=mysqli_query($query);
+										while($row = mysqli_fetch_array($result)) {
 									?>
 										<li><b><?php echo $row["fname"]; ?></b></li>
 									<?php

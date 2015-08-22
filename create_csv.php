@@ -11,7 +11,7 @@ $event_id = $_GET['id'];
 
 // get list of participants
 $query="select * from user where event_id = $event_id order by user.fname asc;";
-$result=mysql_query($query);
+$result=mysqli_query($query);
 
 // delete file and set up handle
 $myFile = "Participants.csv";
@@ -23,7 +23,7 @@ $csv_array = array('Name', 'Bio', 'Email', '# People Met', 'Round #', 'Person Me
 fputcsv($fh, $csv_array);
 
 // loop through all participants
-while($row = mysql_fetch_array($result)) {
+while($row = mysqli_fetch_array($result)) {
 	$a_fname = $row['fname'];
 	$a_bio = $row['bio'];
 	$a_email = $row['email'];
@@ -34,16 +34,16 @@ while($row = mysql_fetch_array($result)) {
 					join locations on user_met.location_id = locations.id
 					join user on user_met.met_user_id = user.id
 					where user_id = ". $row['id'];
-	$resulta =mysql_query($query);
+	$resulta =mysqli_query($query);
 	
 	// how many ppl did this participant meet
-	$count = mysql_num_rows($resulta);
+	$count = mysqli_num_rows($resulta);
 	
 	// insert participant into csv
 	$csv_array = array($a_fname, $a_bio, $a_email, $count);
 	fputcsv($fh, $csv_array);
 
-	while($rowa = mysql_fetch_array($resulta)) {
+	while($rowa = mysqli_fetch_array($resulta)) {
 		$csv_array = array('','','','', $rowa['meeting_order'], $rowa['fname'], $rowa['name']);
 		fputcsv($fh, $csv_array);
 	}
