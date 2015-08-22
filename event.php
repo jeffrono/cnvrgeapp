@@ -6,9 +6,9 @@
 	$event_id = $_GET['id'];
 	$query= "select * from event where id = $event_id;";
 	$result=mysqli_query($link,$query);
-	echo $query;
-	echo $link;
-	echo $result;
+	error_log($query);
+	error_log( $link);
+	error_log( $result);
 	$row = mysqli_fetch_array($result);
 	$event_status = $row['status'];	// status of event
 	$event_name = $row['name'];	// event name
