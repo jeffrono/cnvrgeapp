@@ -1,14 +1,11 @@
 <?php
 	session_start();
 	require_once('dbFunctions.php');
-	$link = $link = db_connect();
+	$link = db_connect();
 	// get event info
 	$event_id = $_GET['id'];
 	$query= "select * from event where id = $event_id;";
 	$result=mysqli_query($link,$query);
-	error_log($query);
-	error_log( $link);
-	error_log( $result);
 	$row = mysqli_fetch_array($result);
 	$event_status = $row['status'];	// status of event
 	$event_name = $row['name'];	// event name
