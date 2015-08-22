@@ -14,7 +14,7 @@ while (list($key,$value) = each($_POST)){
 		$query="update locations set name = '$value' where number = $key and event_id = $event_id;";
 	}
 	
-	$result=mysqli_query($query);
+	$result=mysqli_query($link,$query);
 } // while
 		
 $host  = $_SERVER['HTTP_HOST'];

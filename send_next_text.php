@@ -14,7 +14,7 @@ $comments_on= 0;
 
 // get event info
 $query="select * from event where id = $event_id;";
-$result=mysqli_query($query);
+$result=mysqli_query($link,$query);
 $row = mysqli_fetch_array($result);
 $outgoing_twilio = $row['phone_number'];
 $event_name = $row['name'];
@@ -23,17 +23,17 @@ $num_locs = $row['num_locs'];
 
 // update status to LIVE (2)
 $query="update event set status = 2 where id = $event_id;";
-$result=mysqli_query($query);
+$result=mysqli_query($link,$query);
 
 // get this round from meeting table
 $query="select max(meeting_order) as last_round from meeting where event_id = $event_id;";
-$result=mysqli_query($query);
+$result=mysqli_query($link,$query);
 $row = mysqli_fetch_array($result);
 $this_round = $row['last_round'] +1;
 
 // get event info
 $query="select * from event where id = $event_id;";
-$result=mysqli_query($query);
+$result=mysqli_query($link,$query);
 $row = mysqli_fetch_array($result);
 $outgoing_twilio = $row['phone_number'];
 
@@ -41,7 +41,7 @@ $outgoing_twilio = $row['phone_number'];
 
 // get the number of meetings we want to do this round
 $query="select 1 from user where event_id = $event_id and `status` < 4;";
-$result=mysqli_query($query);
+$result=mysqli_query($link,$query);
 $num_meetings = mysqli_num_rows($result) / 2;
 $num_meetings = floor($num_meetings);
 
@@ -49,7 +49,7 @@ $num_meetings = floor($num_meetings);
 $locations = array();
 $location_ids = array();
 $query="select * from locations where number <= $num_locs and event_id = $event_id;";
-$result=mysqli_query($query);
+$result=mysqli_query($link,$query);
 while($row = mysqli_fetch_array($result)) {
 	$location_id = $row['id'];
 	$location_name = $row['name'];
@@ -102,7 +102,7 @@ for ($i = 1; $i <= $num_meetings; $i++) {
 	order by a.id *rand()
 	limit 1;";
 	
-	$resultb=mysqli_query($query);
+	$resultb=mysqli_query($link,$query);
 	
 	// LOG
 	if($comments_on) {
@@ -190,19 +190,19 @@ for ($i = 1; $i <= $num_meetings; $i++) {
 	$query = "insert into sms_log (event_id, user_id, sent_to, sent_from, sms_body) values 
 	($event_id, $A_user_id, '$A_user_phone', '$outgoing_twilio', '$A_sms'),
 	($event_id, $B_user_id, '$B_user_phone', '$outgoing_twilio', '$B_sms');";
-	mysqli_query($query);
+	mysqli_query($link,$query);
 
 	// insert into user_met table
 	$query = "insert into user_met (event_id, user_id, met_user_id, meeting_order, location_id) values 
 	($event_id, $A_user_id, $B_user_id, $this_round, $location_id),
 	($event_id, $B_user_id, $A_user_id, $this_round, $location_id);";
-	mysqli_query($query);
+	mysqli_query($link,$query);
 	
 	// insert into meeting table
 	$query = "insert into meeting 
 	(A_user_id, A_user_phone, B_user_id, B_user_phone, event_id, location_id, meeting_order, A_sms, B_sms) values
 	($A_user_id, '$A_user_phone', $B_user_id, '$B_user_phone', $event_id, $location_id, $this_round, '$A_sms', '$B_sms');";
-	mysqli_query($query);
+	mysqli_query($link,$query);
 	
 	//////////////
 	// append to email digest here
@@ -213,9 +213,9 @@ for ($i = 1; $i <= $num_meetings; $i++) {
 	$B_digest_email = "Meeting # $this_round ($location_name): $B_fname ($B_email), $B_bio\n";
 	
 	$query = "update user set email_digest = CONCAT( email_digest, '$A_digest_email' ) where id = $B_user_id";
-	mysqli_query($query);
+	mysqli_query($link,$query);
 	$query = "update user set email_digest = CONCAT( email_digest, '$B_digest_email' ) where id = $A_user_id";
-	mysqli_query($query);
+	mysqli_query($link,$query);
 	
 }  // while
 
@@ -234,7 +234,7 @@ and user.id not in (
 and user.id not in (
 	select B_user_id from meeting where meeting_order = $this_round and event_id = $event_id)
 	and user.event_id = $event_id;";
-$result = mysqli_query($query);
+$result = mysqli_query($link,$query);
 
 // loop through each extra person missing a meeting
 while($row = mysqli_fetch_array($result)) {
@@ -261,7 +261,7 @@ while($row = mysqli_fetch_array($result)) {
 						)
 						order by rand()
 						limit 1;";
-	$resultb = mysqli_query($query);
+	$resultb = mysqli_query($link,$query);
 	
 	// has this person simply met everyone?
 	if(!(mysqli_num_rows($resultb) > 0) && ($sms_on)) {
@@ -283,7 +283,7 @@ while($row = mysqli_fetch_array($result)) {
 	$location_id = $rowb['location_id'];
 	
 	$query = "select 1 from user_met where user_id = $A_user_id and met_user_id = $A_meet_id and event_id = $event_id;";
-	$resultb = mysqli_query($query);
+	$resultb = mysqli_query($link,$query);
 	
 	// just swapped A for B below	
 	
@@ -304,7 +304,7 @@ while($row = mysqli_fetch_array($result)) {
 	// set this meeting to a 3person meeting
 	$meeting_id = $rowb['id'];
 	$query = "update meeting set three_person = 1 where id = $meeting_id;"; // this should NOT require 'and event_id = $event_id'
-	mysqli_query($query);
+	mysqli_query($link,$query);
 	
 	// message to the stranger
 	$B_sms = "Heads up: You will also be meeting $A_fname ($A_bio) who will be joining your meeting to make the trifecta.";
@@ -331,22 +331,22 @@ while($row = mysqli_fetch_array($result)) {
 		
 			// insert into sms_log
 			$query = "insert into sms_log (event_id, user_id, sent_to, sent_from, sms_body) values ($event_id, $A_user_id, '$A_user_phone', '$outgoing_twilio', '$A_sms');";
-			mysqli_query($query);
+			mysqli_query($link,$query);
 			$query = "insert into sms_log (event_id, user_id, sent_to, sent_from, sms_body) values ($event_id, $B_user_id, '$B_user_phone', '$outgoing_twilio', '$B_sms');";
-			mysqli_query($query);
+			mysqli_query($link,$query);
 					
 	// insert into user_met table
 	$query = "insert into user_met (event_id, user_id, met_user_id, meeting_order, location_id) values ($event_id, $A_user_id, $B_user_id, $this_round, $location_id);";
-	mysqli_query($query);
+	mysqli_query($link,$query);
 	$query = "insert into user_met (event_id, user_id, met_user_id, meeting_order, location_id) values ($event_id, $B_user_id, $A_user_id, $this_round, $location_id);";
-	mysqli_query($query);
+	mysqli_query($link,$query);
 	
 	// insert into meeting table
 	$query = "insert into meeting 
 	(A_user_id, A_user_phone, B_user_id, B_user_phone, event_id, location_id, meeting_order, A_sms, B_sms, three_person) values
 	($A_user_id, '$A_user_phone', $B_user_id, '$B_user_phone', $event_id, $location_id, $this_round, '$A_sms', '$B_sms', 1);";
 	//echo "$query<br>";
-	mysqli_query($query);
+	mysqli_query($link,$query);
 	
 	//////////////
 	// append to email digest here
@@ -355,7 +355,7 @@ while($row = mysqli_fetch_array($result)) {
 	
 	// get location name
 	$query = "select * from locations where id = $location_id"; // dont think we NEED "and event_id=$event_id;"
-	$resultb = mysqli_query($query);
+	$resultb = mysqli_query($link,$query);
 	$rowb = mysqli_fetch_array($resultb);
 	$location_name = $rowb['name'];
 	
@@ -364,15 +364,15 @@ while($row = mysqli_fetch_array($result)) {
 	$B_digest_email = "Meeting # $this_round ($location_name): $B_fname ($B_email), $B_bio\n";
 	
 	$query = "update user set email_digest = CONCAT( email_digest, '$A_digest_email' ) where id = $B_user_id";
-	mysqli_query($query);
+	mysqli_query($link,$query);
 	$query = "update user set email_digest = CONCAT( email_digest, '$B_digest_email' ) where id = $A_user_id";
-	mysqli_query($query);
+	mysqli_query($link,$query);
 
 } // end while loop
 
 // update the meet_status table
 $query = "replace into meeting_status (event_id, order_num, status, meeting_time) values ($event_id, $this_round, 1, now());";
-mysqli_query($query);
+mysqli_query($link,$query);
 
 $host  = $_SERVER['HTTP_HOST'];
 $uri   = rtrim(dirname($_SERVER['PHP_SELF']), '/\\');

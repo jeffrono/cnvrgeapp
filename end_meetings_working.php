@@ -13,7 +13,7 @@ $message = stripslashes($_POST['message']); // strip slash because otherwise twi
 
 // get event info
 $query="select * from event where id = $event_id;";
-$result=mysqli_query($query);
+$result=mysqli_query($link,$query);
 $row = mysqli_fetch_array($result);
 $outgoing_twilio = $row['phone_number'];
 $event_name = $row['name'];
@@ -31,7 +31,7 @@ $message = substr($message, 0 , 158);
 // notify all active users
 // also email digest of all meetings
 $query="select * from user where event_id = $event_id;";
-$result=mysqli_query($query);
+$result=mysqli_query($link,$query);
 while($row = mysqli_fetch_array($result)) {
 	$user_twilio = $row["twilio"];
 	$user_name = $row["fname"];
@@ -65,7 +65,7 @@ while($row = mysqli_fetch_array($result)) {
 
 if($event_email) {
 	$query="select * from user where event_id = $event_id;";
-	$result=mysqli_query($query);
+	$result=mysqli_query($link,$query);
 	while($row = mysqli_fetch_array($result)) {
 		$email_text .= $row['fname']. "\t" . $row['bio']. "\t" . $row['email']. "\n";
 		
@@ -74,7 +74,7 @@ if($event_email) {
 						join locations on user_met.location_id = locations.id
 						join user on user_met.met_user_id = user.id
 						where user_id = ". $row['id'];
-		$resulta =mysqli_query($query);
+		$resulta =mysqli_query($link,$query);
 		$count = mysqli_num_rows($resulta);
 		$email_text .= "\tMet the following $count people:\n";
 		while($rowa = mysqli_fetch_array($resulta)) {
@@ -90,7 +90,7 @@ if($event_email) {
 
 // update status to END (4)
 $query="update event set status = 4 where id = $event_id;";
-$result=mysqli_query($query);
+$result=mysqli_query($link,$query);
 
 $host  = $_SERVER['HTTP_HOST'];
 $uri   = rtrim(dirname($_SERVER['PHP_SELF']), '/\\');

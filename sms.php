@@ -21,7 +21,7 @@ echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Response>";
 
 // get the event info
 $query="select * from event where twilio_phone = '$to';";
-$result=mysqli_query($query);
+$result=mysqli_query($link,$query);
 $row = mysqli_fetch_array($result);
 $event_name = $row['name'];
 $event_id= $row['id'];
@@ -30,7 +30,7 @@ $question = $row['question']; //"Now give a 3 word bio.";
 
 // get event info
 $query="select * from user where twilio = '$from' and event_id = $event_id limit 1;";
-$result=mysqli_query($query);
+$result=mysqli_query($link,$query);
 $row = mysqli_fetch_array($result);
 $u_status = 0;
 $u_status = $row['status'];
@@ -49,7 +49,7 @@ switch ($u_status) {
 <?php
 		} else {
 			$query="select * from user where fname = '$sms' and event_id = $event_id;";
-			$result=mysqli_query($query);
+			$result=mysqli_query($link,$query);
 			$num_rows = mysqli_num_rows($result);
 			if($num_rows > 0) {
 ?>
@@ -62,7 +62,7 @@ switch ($u_status) {
 				$intl = (strlen($from) == 12) ? '0': '1';
 				// insert user
 				$query="insert ignore into user (event_id, twilio, fname, status, intl) values ($event_id, '$from', '$sms', 1, $intl);";
-				mysqli_query($query);
+				mysqli_query($link,$query);
 				// if the person is int'l then we can't respond, so the event organizer better know about them
 ?>
 		
@@ -82,7 +82,7 @@ switch ($u_status) {
 <?php
 		} else {
 			$query="update user set bio='$sms', status = 2 where twilio = '$from' and event_id = $event_id;";
-			mysqli_query($query);
+			mysqli_query($link,$query);
 ?>
 		
 			<Sms>What's your email? It'll only be used for this event. At the end you'll get a list of everyone you met. (Respond "NO" to be excluded.) (Step 3/3)</Sms>
@@ -93,7 +93,7 @@ switch ($u_status) {
 	case 2: // is texting email
 		if(strcasecmp($sms, 'no') == 0) {
 			$query="update user set email ='', status = 3 where twilio = '$from' and event_id = $event_id;";
-			mysqli_query($query);
+			mysqli_query($link,$query);
 ?>
 		
 			<Sms>Thx, get ready to meet some people! FYI you may text 'OUT' (to quit or take a break) and 'IN' (to jump back in for the next round).</Sms>
@@ -103,7 +103,7 @@ switch ($u_status) {
 		//if email is valid
 		elseif(filter_var($sms, FILTER_VALIDATE_EMAIL)) {
 			$query="update user set email='$sms', status = 3 where twilio = '$from' and event_id = $event_id;";
-			mysqli_query($query);
+			mysqli_query($link,$query);
 ?>
 		
 			<Sms>Thx, get ready to meet some people! FYI you may text 'OUT' (to quit or take a break) and 'IN' (to jump back in for the next round).</Sms>
@@ -120,7 +120,7 @@ switch ($u_status) {
 	case 3: // is texting OUT?
 		if(strcasecmp($sms, 'out') == 0 OR strcasecmp($sms, 'pause') == 0) {
 			$query="update user set status=4 where twilio = '$from' and event_id = $event_id;";
-			mysqli_query($query);
+			mysqli_query($link,$query);
 ?>
 		
 			<Sms>You've been checked out.  You may text 'IN' if you would like to participate again.</Sms>
@@ -138,19 +138,19 @@ switch ($u_status) {
 					(m.B_user_id in (select id from user u where u.twilio = '$from' and u.event_id = $event_id) )
 					and u.event_id = $event_id
 				);";
-			$result=mysqli_query($query);
+			$result=mysqli_query($link,$query);
 			$row = mysqli_fetch_array($result);
 			$B_user_id = ($row['A_user_phone'] == $from) ? $row['B_user_id']: $row['A_user_id'];
 			$B_user_phone = ($row['A_user_phone'] == $from) ? $row['B_user_phone']: $row['A_user_phone'];
 			
 			// check out B
 			$query="update user set status=4 where twilio = '$B_user_phone' and event_id = $event_id;";
-			mysqli_query($query);
+			mysqli_query($link,$query);
 			
 			// set this meeting "no_show" to 1, bc it never happened!
 			// need to put this into query for subsequent rounds, and for email
 			$query="update meeting set no_show=1 where id = " . $row['id'];
-			mysqli_query($query);
+			mysqli_query($link,$query);
 			
 			// tell B they've been checked out.
 			$B_sms = "You were supposed to meet $u_name this round, but you stood them up! So we've opted you out. Don't worry, to opt back in respond 'in'.";
@@ -166,15 +166,15 @@ switch ($u_status) {
 			// insert this into sms log
 			$B_sms = mysqli_real_escape_string($B_sms);
 			$query = "insert into sms_log (event_id, user_id, sent_to, sent_from, sms_body) values ($event_id, $B_user_id, '$B_user_phone', '$outgoing_twilio', '$B_sms');";
-			mysqli_query($query);
+			mysqli_query($link,$query);
 		
 			// append to the email (one of you didn't show up to the previous meeting)
 			$A_digest_email = mysqli_real_escape_string("The previous meeting didn't happen because the other participant didn't show up.\n");
 			$B_digest_email = mysqli_real_escape_string("The previous meeting didn't happen because you didn't show up.\n");
 			$query = "update user set email_digest = CONCAT( email_digest, '$A_digest_email' ) where id = $B_user_id";
-			mysqli_query($query);
+			mysqli_query($link,$query);
 			$query = "update user set email_digest = CONCAT( email_digest, '$B_digest_email' ) where id = $A_user_id";
-			mysqli_query($query);
+			mysqli_query($link,$query);
 			
 			
 			// find a new person and create a meeting - find someone who's status is 'stood up' - if there is at least 3 mins left, then send the text and connect them
@@ -197,7 +197,7 @@ switch ($u_status) {
 	case 4: // is texting IN?
 		if(strcasecmp($sms, 'in') == 0) {
 			$query="update user set status=3 where twilio = '$from' and event_id = $event_id;";
-			mysqli_query($query);
+			mysqli_query($link,$query);
 ?>
 		
 			<Sms>Welcome back! You'll be included in the next round of meetings.</Sms>

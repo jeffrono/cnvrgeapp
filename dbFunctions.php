@@ -16,13 +16,9 @@ function db_connect() {
 	$db = substr($url["path"], 1);
 	
 	$link= new mysqli($server, $username, $password, $db);
-	if (!$link) {
-		die('Could not connect: ' . mysqli_error());
-	}
-	else {
-		//mysqli_select_db($database, $link);
-		return $link;
-	}
+	if ($link->connect_errno) echo "Error - Failed to connect to MySQL: " . $link->connect_error;
+	
+	return $link;
 }
 
 ?>

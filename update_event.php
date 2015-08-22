@@ -6,7 +6,7 @@ $event_id = $_POST['event_id'];
 
 while (list($key,$value) = each($_POST)){
 	$query="update event set $key = '$value' where id = $event_id;";
-	$result=mysqli_query($query);
+	$result=mysqli_query($link,$query);
 	
 	//echo "$key -> $value<br>";
 	

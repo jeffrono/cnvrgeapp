@@ -11,7 +11,7 @@ $event_id = $_GET['id'];
 
 // get list of participants
 $query="select * from user where event_id = $event_id order by user.fname asc;";
-$result=mysqli_query($query);
+$result=mysqli_query($link,$query);
 
 // delete file and set up handle
 $myFile = "Participants.csv";
@@ -34,7 +34,7 @@ while($row = mysqli_fetch_array($result)) {
 					join locations on user_met.location_id = locations.id
 					join user on user_met.met_user_id = user.id
 					where user_id = ". $row['id'];
-	$resulta =mysqli_query($query);
+	$resulta =mysqli_query($link,$query);
 	
 	// how many ppl did this participant meet
 	$count = mysqli_num_rows($resulta);
