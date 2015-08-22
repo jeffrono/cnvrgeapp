@@ -1,7 +1,7 @@
 <?php
 	session_start();
 	require_once('dbFunctions.php');
-	$link = db_connect();
+	$link = $link = db_connect();
 	// get event info
 	$event_id = $_GET['id'];
 	$query= "select * from event where id = $event_id;";

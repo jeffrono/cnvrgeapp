@@ -2,7 +2,7 @@
 
 session_start();
 require_once('dbFunctions.php');
-db_connect();
+$link = db_connect();
 
 // get event info
 $event_id = $_GET['id'];

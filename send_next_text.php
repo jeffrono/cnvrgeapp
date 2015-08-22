@@ -6,7 +6,7 @@ $ApiVersion = "2010-04-01";
 
 
 $client = new TwilioRestClient($AccountSid, $AuthToken);
-db_connect();
+$link = db_connect();
 
 $event_id = $_GET['id'];
 

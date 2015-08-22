@@ -1,6 +1,6 @@
 <?php
 require_once('dbFunctions.php');
-db_connect();
+$link = db_connect();
 
 $event_id = $_POST['event_id'];
 

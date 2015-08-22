@@ -5,7 +5,7 @@ require "twilio.php";
 $ApiVersion = "2010-04-01";
 
 $client = new TwilioRestClient($AccountSid, $AuthToken);
-db_connect();
+$link = db_connect();
 
 $event_id = $_POST['event_id'];
 $message = stripslashes($_POST['message']); // strip slash because otherwise twilio will send "it\'s"

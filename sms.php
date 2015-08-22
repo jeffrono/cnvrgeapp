@@ -14,7 +14,7 @@ require "twilio.php";
 $ApiVersion = "2010-04-01";
 
 $client = new TwilioRestClient($AccountSid, $AuthToken);
-db_connect();
+$link = db_connect();
 
 header("content-type: text/xml");
 echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Response>";
