@@ -169,17 +169,15 @@ for ($i = 1; $i <= $num_meetings; $i++) {
 	
 	if($sms_on) {
 		// send texts
-		$response = $client->request("/$ApiVersion/Accounts/$AccountSid/SMS/Messages",
-			"POST", array(
+		$response = $client->account->messages->create(array(
 				"To" => $A_user_phone,
 				"From" => $outgoing_twilio,
 				"Body" => $A_sms
 			));
-		
+				
 		echo "Sent message {$response->sid}";
 		
-		$response = $client->request("/$ApiVersion/Accounts/$AccountSid/SMS/Messages",
-			"POST", array(
+		$response = $client->account->messages->create(array(
 				"To" => $B_user_phone,
 				"From" => $outgoing_twilio,
 				"Body" => $B_sms
@@ -268,12 +266,14 @@ while($row = mysqli_fetch_array($result)) {
 	if(!(mysqli_num_rows($resultb) > 0) && ($sms_on)) {
 		// send them a text that they met everyone...
 		$A_sms = 'Heya. Well, it looks like you met every active participant! You deserve to celebrate.';
-		$response = $client->request("/$ApiVersion/Accounts/$AccountSid/SMS/Messages",
-			"POST", array(
+		$response = $client->account->messages->create(array(
 				"To" => $A_user_phone,
 				"From" => $outgoing_twilio,
 				"Body" => $A_sms
 			));
+			
+		echo "Sent message {$response->sid}";
+		
 		continue;
 	}
 	
@@ -314,20 +314,23 @@ while($row = mysqli_fetch_array($result)) {
 	if($sms_on) {
 		
 		// text oddball
-		$response = $client->request("/$ApiVersion/Accounts/$AccountSid/SMS/Messages",
-			"POST", array(
+		$response = $client->account->messages->create(array(
 				"To" => $A_user_phone,
 				"From" => $outgoing_twilio,
 				"Body" => $A_sms
 			));
 		
+		echo "Sent message {$response->sid}";
+		
 		// text to stranger
-		$response = $client->request("/$ApiVersion/Accounts/$AccountSid/SMS/Messages",
-			"POST", array(
+		$response = $client->account->messages->create(array(
 				"To" => $B_user_phone,
 				"From" => $outgoing_twilio,
 				"Body" => $B_sms
 			));
+			
+		echo "Sent message {$response->sid}";
+		
 	}		
 		
 			// insert into sms_log
