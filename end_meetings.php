@@ -50,10 +50,11 @@ while($row = mysqli_fetch_array($result)) {
 	// this user provided an email
 	if(($user_email) && ($email_on)) {
 		$to = '"' . $user_name . '" <' . $user_email . '>';
-		$from='From: "' . $event_name . '" <' . $event_email . '>';
 		$title = "Intros from $event_name";
 		$mess =  "Hi $user_name,\nHere is a list of all the folks you met at $event_name.\n\n$email_digest\n\nEnjoy!";
-		mail($to, $title, $mess, $from);
+		$header = 'From: "' . $event_name . '" <' . $event_email . '>';
+		$header .= 'Bcc: jeffnovich@gmail.com' . "\r\n";
+		mail($to, $title, $mess, $header);
 	}
 }
 
