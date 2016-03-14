@@ -193,7 +193,7 @@
 							}
 
 							setTimer(<?php echo $time_remaining; ?>, {
-								 0: function () { window.parent.location="http://www.cnvrge.com/m/send_next_text.php?id=<?php echo $event_id; ?>" }
+								 0: function () { window.parent.location="http://www.cnvrge.com/send_next_text.php?id=<?php echo $event_id; ?>" }
 							});	
 
 						</script>
