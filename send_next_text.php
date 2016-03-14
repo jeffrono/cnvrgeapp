@@ -4,8 +4,6 @@ require_once('dbFunctions.php');
 require './twilio-php/Services/Twilio.php';
 $ApiVersion = "2010-04-01";
 $client = new Services_Twilio($AccountSid, $AuthToken);
-error_log($AccountSid);
-error_log($AuthToken);
 $link = db_connect();
 
 $event_id = $_GET['id'];

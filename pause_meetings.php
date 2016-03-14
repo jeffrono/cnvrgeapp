@@ -1,7 +1,7 @@
 <?php
 session_start();
 require_once('dbFunctions.php');
-require "/twilio-php/Services/Twilio.php";
+require './twilio-php/Services/Twilio.php';
 $ApiVersion = "2010-04-01";
 $client = new Services_Twilio($AccountSid, $AuthToken);
 
@@ -40,8 +40,7 @@ while($row = mysqli_fetch_array($result)) {
 	$user_twilio = $row["twilio"];
 
 	// text the user
-	$response = $client->request("/$ApiVersion/Accounts/$AccountSid/SMS/Messages",
-		"POST", array(
+	$response = $client->account->messages->create(array(
 			"To" => $user_twilio,
 			"From" => $outgoing_twilio,
 			"Body" => $message
