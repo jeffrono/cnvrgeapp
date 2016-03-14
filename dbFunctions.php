@@ -2,8 +2,8 @@
 
 // get twilio vars
 
-$AccountSid = parse_url(getenv("TWILIO_ACCOUNT_SID"));
-$AuthToken = parse_url(getenv("TWILIO_AUTH_TOKEN"));
+$AccountSid = getenv("TWILIO_ACCOUNT_SID");
+$AuthToken = getenv("TWILIO_AUTH_TOKEN");
 
 //test
 
