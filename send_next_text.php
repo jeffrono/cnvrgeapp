@@ -1,7 +1,8 @@
 <?php
 session_start();
 require_once('dbFunctions.php');
-require "/twilio-php/Services/Twilio.php";
+#require "/twilio-php/Services/Twilio.php";
+require_once __DIR__ . '/../twilio-php/Services/Twilio.php';
 $ApiVersion = "2010-04-01";
 $client = new Services_Twilio($AccountSid, $AuthToken);
 $link = db_connect();
@@ -176,12 +177,15 @@ for ($i = 1; $i <= $num_meetings; $i++) {
 				"Body" => $A_sms
 			));
 		
+		echo "Sent message {$response->sid}";
+		
 		$response = $client->request("/$ApiVersion/Accounts/$AccountSid/SMS/Messages",
 			"POST", array(
 				"To" => $B_user_phone,
 				"From" => $outgoing_twilio,
 				"Body" => $B_sms
 			));
+		echo "Sent message {$response->sid}";
 	}
 	
 	// insert into sms_log (even if sms is off)
