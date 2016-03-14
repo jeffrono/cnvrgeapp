@@ -377,6 +377,6 @@ mysqli_query($link,$query);
 $host  = $_SERVER['HTTP_HOST'];
 $uri   = rtrim(dirname($_SERVER['PHP_SELF']), '/\\');
 $extra = 'event.php?id=' . $event_id;
-header("Location: https://$host$uri/$extra");
+header("Location: http://$host$uri/$extra");
 
 ?>
