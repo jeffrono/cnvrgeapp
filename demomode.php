@@ -28,9 +28,13 @@ $result=mysqli_query($link,$query);
 $query="delete from user where event_id = $event_id;";
 $result=mysqli_query($link,$query);
 
+$names = array("Zachary Feola", "Elouise Graydon", "Tania Dawe", "Mika Hotz", "Kristyn Garica", "Phuong Roessler", "Tressie Copeland", "Garth Juan", "Emile Juliano", "Bong Mcgarity", "Wilmer Aviles", "Chastity Bridgewater", "Sharie Weatherwax", "Phebe Lauderdale", "Dorotha Seidman", "Rhett Riggan", "Ceola Deloney", "June Nurse", "Jannie Gunia", "Jamel Buenrostro");
+
+$bios = array("Hand Weaver", "All Terrain Vehicle Technician", "Aircraft Instrument Mechanic", "Preschool Director", "Procurement Manager", "Special Education Kindergarten Teacher", "Field Artillery Officer", "Equipment Maintenance Technician", "Animal Pathologist", "Boxing Trainer", "Scout Sniper", "Forestry Laborer", "Bottle Line Worker", "Research Anthropologist", "Long Wall Shear Operator", "Foreign Correspondent", "Naval Aircrewman", "Front-End Loader Operator", "Commercial Art Instructor", "Ambulance Attendant");
+
 // loop through the number of demo accounts to create
-for ($i = 100; $i <= $num_accts +99; $i++) {
-	$query = "INSERT INTO user (event_id, fname, bio, twilio, status, email) VALUES ($event_id, 'person$i', 'bio_$i', '+13473388651', 3, 'jeffnovich+$i@gmail.com')";
+for ($i = 0; $i <= $num_accts; $i++) {
+	$query = "INSERT INTO user (event_id, fname, bio, twilio, status, email) VALUES ($event_id, '$names[$i]', '$bios[$i]', '+13473388651', 3, 'jeffnovich+$i@gmail.com')";
 	$result=mysqli_query($link,$query);
 }
 
