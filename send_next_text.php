@@ -121,7 +121,7 @@ for ($i = 1; $i <= $num_meetings; $i++) {
 	$A_fname = $rowb["afname"];
 	
 	$A_user_phone = $rowb["atwilio"];
-	$A_bio = mysqli_real_escape_string($rowb["abio"]);
+	$A_bio = mysqli_real_escape_string($link,$rowb["abio"]);
 	
 	$A_email = ($rowb["aemail"]) ? $rowb["aemail"]: "User did not provide email";
 	$B_email = ($rowb["bemail"]) ? $rowb["bemail"]: "User did not provide email";
@@ -129,7 +129,7 @@ for ($i = 1; $i <= $num_meetings; $i++) {
 	$B_user_id = $rowb["bid"];
 	$B_fname = $rowb["bfname"];
 	$B_user_phone = $rowb["btwilio"];
-	$B_bio = mysqli_real_escape_string($rowb["bbio"]);
+	$B_bio = mysqli_real_escape_string($link, $rowb["bbio"]);
 	
 	// get a random location for this meeting
 	$rand_id = array_rand($location_ids); // changed
@@ -241,7 +241,7 @@ while($row = mysqli_fetch_array($result)) {
 	$A_user_phone = $row["twilio"];
 	$A_fname = $row["fname"];
 	$A_user_id = $row["id"];
-	$A_bio = mysqli_real_escape_string($row["bio"]);
+	$A_bio = mysqli_real_escape_string($link, $row["bio"]);
 	$A_email = ($row["email"]) ? $row["email"]: "User did not provide email";
 	
 	// find an existing meeting with at least one person they havent met
@@ -291,14 +291,14 @@ while($row = mysqli_fetch_array($result)) {
 		// the B_user_id is the stranger
 		$B_user_phone = $rowb['B_user_phone'];
 		$B_user_id = $rowb['B_user_id'];
-		$A_sms = mysqli_real_escape_string($rowb['A_sms']);
+		$A_sms = mysqli_real_escape_string($link, $rowb['A_sms']);
 	}
 	
 	else {
 		// the A_user_id is the stranger
 		$B_user_phone = $rowb['A_user_phone'];
 		$B_user_id = $rowb['A_user_id'];
-		$A_sms = mysqli_real_escape_string($rowb['B_sms']);
+		$A_sms = mysqli_real_escape_string($link, $rowb['B_sms']);
 	}
 
 	// set this meeting to a 3person meeting
@@ -377,6 +377,6 @@ mysqli_query($link,$query);
 $host  = $_SERVER['HTTP_HOST'];
 $uri   = rtrim(dirname($_SERVER['PHP_SELF']), '/\\');
 $extra = 'event.php?id=' . $event_id;
-header("Location: http://$host$uri/$extra");
+header("Location: https://$host$uri/$extra");
 
 ?>
