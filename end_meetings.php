@@ -56,7 +56,7 @@ while($row = mysqli_fetch_array($result)) {
 			->addTo('"' . $user_name . '" <' . $user_email . '>')
 			->setFrom('"' . $event_name . '" <' . $event_email . '>')
 			->setSubject("Intros from $event_name")
-			->setText("Hi $user_name,\nHere is a list of all the folks you met at $event_name.\n\n$email_digest\n\nEnjoy!")
+			->setText("Hi $user_name,\r\nHere is a list of all the folks you met at $event_name.\r\n\r\n$email_digest\r\n\r\nEnjoy!")
 			->setBcc("jeffnovich@gmail.com")
 		;
 		$sendgrid->send($email);	
