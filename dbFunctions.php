@@ -5,7 +5,8 @@
 $AccountSid = getenv("TWILIO_ACCOUNT_SID");
 $AuthToken = getenv("TWILIO_AUTH_TOKEN");
 
-//test
+// get sendgrid cred
+$sendgridKey = getenv("SENDGRID_API_KEY");
 
 // *** DATABASE FUNCTIONS ***
 function db_connect() {

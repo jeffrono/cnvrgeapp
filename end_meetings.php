@@ -2,8 +2,10 @@
 session_start();
 require_once('dbFunctions.php');
 require './twilio-php/Services/Twilio.php';
+require './sendgrid-php/sendgrid-php.php';
 $ApiVersion = "2010-04-01";
 $client = new Services_Twilio($AccountSid, $AuthToken);
+$sendgrid = new SendGrid($sendgridKey);
 
 $link = db_connect();
 
@@ -49,12 +51,15 @@ while($row = mysqli_fetch_array($result)) {
 		
 	// this user provided an email
 	if(($user_email) && ($email_on)) {
-		$to = '"' . $user_name . '" <' . $user_email . '>';
-		$title = "Intros from $event_name";
-		$mess =  "Hi $user_name,\nHere is a list of all the folks you met at $event_name.\n\n$email_digest\n\nEnjoy!";
-		$header = 'From: "' . $event_name . '" <' . $event_email . '>';
-		$header .= 'Bcc: jeffnovich@gmail.com' . "\r\n";
-		mail($to, $title, $mess, $header);
+		$email = new SendGrid\Email();
+		$email
+			->addTo('"' . $user_name . '" <' . $user_email . '>')
+			->setFrom('"' . $event_name . '" <' . $event_email . '>')
+			->setSubject("Intros from $event_name")
+			->setText("Hi $user_name,\nHere is a list of all the folks you met at $event_name.\n\n$email_digest\n\nEnjoy!")
+			->setBcc("jeffnovich@gmail.com")
+		;
+		$sendgrid->send($email);	
 	}
 }
 
