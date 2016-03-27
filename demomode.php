@@ -34,7 +34,7 @@ $bios = array("Hand Weaver", "All Terrain Vehicle Technician", "Aircraft Instrum
 
 // loop through the number of demo accounts to create
 for ($i = 0; $i <= $num_accts; $i++) {
-	$query = "INSERT INTO user (event_id, fname, bio, twilio, status, email) VALUES ($event_id, '$names[$i]', '$bios[$i]', '+13473388651', 3, 'jeffnovich+$i@gmail.com')";
+	$query = "INSERT INTO user (event_id, fname, bio, twilio, status, email) VALUES ($event_id, '$names[$i]', '$bios[$i]', '+13473388651', 3, 'cnvrge+$i@gmail.com')";
 	$result=mysqli_query($link,$query);
 }
 
