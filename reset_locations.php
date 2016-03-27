@@ -14,6 +14,8 @@ for ($i = 1; $i <= 100; $i++) {
 	$result=mysqli_query($link,$query);
 }
 
+// the bar, table 1, table 2, north wall, sponsor area
+
 $host  = $_SERVER['HTTP_HOST'];
 $uri   = rtrim(dirname($_SERVER['PHP_SELF']), '/\\');
 $extra = 'locations.php?id=' . $event_id;
