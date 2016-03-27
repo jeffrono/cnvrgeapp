@@ -208,8 +208,8 @@ for ($i = 1; $i <= $num_meetings; $i++) {
 	//////////////////
 		
 	// Meeting # 4 (near bar): John Smith (jonmsith@gmail.com), 3 word bio\n
-	$A_digest_email = "Meeting # $this_round ($location_name): $A_fname ($A_email), $A_bio\n";
-	$B_digest_email = "Meeting # $this_round ($location_name): $B_fname ($B_email), $B_bio\n";
+	$A_digest_email = "Meeting # $this_round ($location_name): $A_fname ($A_email), $A_bio\r\n";
+	$B_digest_email = "Meeting # $this_round ($location_name): $B_fname ($B_email), $B_bio\r\n";
 	
 	$query = "update user set email_digest = CONCAT( email_digest, '$A_digest_email' ) where id = $B_user_id";
 	mysqli_query($link,$query);
