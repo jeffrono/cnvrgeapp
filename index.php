@@ -71,7 +71,8 @@
 			<ul>
           	<li class="active"><a class="scroll-up" href="#">Home</a></li>
             <li><a class="scroll" href="#features">Features</a></li>
-            <li><a class="scroll" href="#how">How it Works</a></li>
+            <li><a class="scroll" href="#participants">Participants</a></li>
+            <li><a class="scroll" href="#organizers">Organizers</a></li>
             <li><a class="scroll" href="#events">Events</a></li>
             <li><a class="scroll" href="#faq">FAQ</a></li>
             <li><a class="scroll" href="#testimonials">Testimonials</a></li>
