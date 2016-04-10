@@ -538,7 +538,6 @@ There were no musical chairs and no awkwardness. Instead, a text messaging syste
     	<div class="container">
         <div class="row page-header">
           <h2>Find us on social networks</h2>
-          <span>Subtext for header</span>
         </div>
         <div class="row">
           <div class="col-lg-12">
@@ -563,7 +562,7 @@ There were no musical chairs and no awkwardness. Instead, a text messaging syste
     	<div class="container">
         <div class="row">
         	<div class="col-lg-12">
-          	<p class="copyright">&copy; 2014 ULTIMA. All Rights Reserved. Designed by  <a href="http://8guild.com/" target="_blank">8Guild</a></p>
+          	<p class="copyright">Designed by  <a href="http://8guild.com/" target="_blank">8Guild</a></p>
           </div>
         </div>
       </div>
