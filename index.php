@@ -289,7 +289,6 @@ There were no musical chairs and no awkwardness. Instead, a text messaging syste
     	<div class="container">
         <div class="row page-header">
           <h2>FAQ</h2>
-          <span>Subtext for header</span>
         </div>
         <div class="row">
         	<div class="col-lg-3 col-md-4 col-sm-4">
